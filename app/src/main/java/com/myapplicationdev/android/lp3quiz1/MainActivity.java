@@ -38,12 +38,24 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel1 = new
                     NotificationChannel("default", "Default Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
+
 
             channel1.setDescription("This is for default notification");
             notificationManager.createNotificationChannel(channel1);
 
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel2 = new
+                    NotificationChannel("default1", "Marketing Channel",
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            channel2.setDescription("This is for marketing notification");
+            notificationManager.createNotificationChannel(channel2);
+
+        }
+
 
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
         final PendingIntent pIntent = PendingIntent.getActivity (MainActivity.this, requestCode, intent,
@@ -55,9 +67,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                PendingIntent pIntent = PendingIntent.getActivity
+                        ( MainActivity.this, requestCode, intent,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "default");
                 builder.setContentTitle("LP3 Quiz1");
-                builder.setContentText("This is a basic/simple notification");
+                builder.setContentText("This is simple");
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
@@ -73,17 +90,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                PendingIntent pIntent = PendingIntent.getActivity
+                        ( MainActivity.this, requestCode, intent,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
+
                 NotificationCompat.Builder builder = new
                         NotificationCompat.Builder(MainActivity.this, "default");
-                builder.setContentTitle("LP3 Quiz1");
-                builder.setContentText("Expand to see picture");
+                builder.setContentTitle("This is big picture");
+                builder.setContentText("Koala!");
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
 
+                //Show image in notification
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.koala);
+                builder.setLargeIcon(bitmap);
+                builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null));
+
+
+
                 Notification n = builder.build();
 
                 notificationManager.notify(notificationID, n);
+
                 finish();
             }
         });
@@ -100,16 +130,24 @@ public class MainActivity extends AppCompatActivity {
                 NotificationCompat.InboxStyle inboxS = new NotificationCompat.InboxStyle();
                 for (String tmp : al){ //iterate the entire ArrayList object and extract each element into variable tmp
                     inboxS.addLine(tmp);  //do something to the tmp, which is to retrive the value and place into Notification Inbox Style
-                };
+                    System.out.println(tmp);
+
+                }
                 inboxS.setBigContentTitle("Inbox style");
                 inboxS.setSummaryText("List of entries");
 
+
+
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "default");
-                builder.setContentTitle("LP3 Quiz1");
-                builder.setContentText("Expand to see content");
+                builder.setContentTitle("");
+                builder.setContentText("");
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
+
+                builder.setStyle(inboxS);
+
 
                 Notification n = builder.build();
 
