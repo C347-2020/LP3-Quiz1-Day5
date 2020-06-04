@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
     int notificationID = 88;
     int requestCode = 0;
 
-    // test
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "default");
                 builder.setContentTitle("LP3 Quiz1");
-                builder.setContentText("This is a basic/simple notification");
+                builder.setContentText("This is simple");
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
@@ -74,12 +72,15 @@ public class MainActivity extends AppCompatActivity {
         btnPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap imageResource = BitmapFactory.decodeResource(getResources(), R.drawable.koala);
 
                 NotificationCompat.Builder builder = new
                         NotificationCompat.Builder(MainActivity.this, "default");
                 builder.setContentTitle("LP3 Quiz1");
-                builder.setContentText("Expand to see picture");
+                builder.setContentText("This is Big Picture \n Koala!");
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
+                builder.setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(imageResource));
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
 
@@ -87,12 +88,18 @@ public class MainActivity extends AppCompatActivity {
 
                 notificationManager.notify(notificationID, n);
                 finish();
+
             }
         });
 
         btnInbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    NotificationChannel channel = new NotificationChannel("Marketing Channel","Marketing Channel",NotificationManager.IMPORTANCE_DEFAULT);
+                    notificationManager.createNotificationChannel(channel);
+                }
 
                 ArrayList<String> al = new ArrayList<>();
                 al.add("This is the first line");
@@ -112,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setSmallIcon(android.R.drawable.btn_star_big_off);
                 builder.setContentIntent(pIntent);
                 builder.setAutoCancel(true);
+                builder.setStyle(inboxS);
 
                 Notification n = builder.build();
 
